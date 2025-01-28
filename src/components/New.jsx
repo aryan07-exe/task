@@ -1,135 +1,157 @@
 import React, { useState, useEffect } from "react"
-import Calendar from "react-calendar"
-import "react-calendar/dist/Calendar.css";
-import "./New.css";
-import { requestNotificationPermission } from "./firebase-config"
-
-const PRIORITY_COLORS = {
-  low: "#4caf50",
-  medium: "#ff9800",
-  high: "#f44336",
+import { v4 as uuidv4 } from "uuid"
+import "./New.css"
+import image from  "../images/w.png"; 
+const PRIORITY_LEVELS = {
+  LOW: { value: "low", label: "Low", color: "#4caf50" },
+  MEDIUM: { value: "medium", label: "Medium", color: "#ff9800" },
+  HIGH: { value: "high", label: "High", color: "#f44336" },
 }
 
-const ReminderPage = () => {
+function DailyPlanner() {
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem("tasks")
+    return savedTasks ? JSON.parse(savedTasks) : []
+  })
+  const [newTask, setNewTask] = useState({
+    title: "",
+    startTime: "",
+    endTime: "",
+    priority: PRIORITY_LEVELS.MEDIUM.value,
+    completed: false,
+  })
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const [taskInput, setTaskInput] = useState("")
-  const [taskTime, setTaskTime] = useState("")
-  const [taskPriority, setTaskPriority] = useState("medium")
-  const [reminders, setReminders] = useState({})
-  const [userToken, setUserToken] = useState(null)
+  const [sortBy, setSortBy] = useState("startTime")
 
   useEffect(() => {
-    requestNotificationPermission().then((token) => {
-      if (token) setUserToken(token)
-    })
-  }, [])
+    localStorage.setItem("tasks", JSON.stringify(tasks))
+  }, [tasks])
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date)
-  }
-
-  const addTask = () => {
-    if (!taskInput.trim() || !taskTime) return
-
-    const dateKey = selectedDate.toDateString()
-    const newTask = {
-      text: taskInput,
-      time: taskTime,
-      priority: taskPriority,
-    }
-
-    setReminders((prev) => ({
-      ...prev,
-      [dateKey]: [...(prev[dateKey] || []), newTask],
-    }))
-
-    setTaskInput("")
-    setTaskTime("")
-    scheduleNotification(newTask, selectedDate)
-  }
-
-  const scheduleNotification = (task, date) => {
-    const [hours, minutes] = task.time.split(":")
-    const scheduledTime = new Date(date)
-    scheduledTime.setHours(Number.parseInt(hours, 10), Number.parseInt(minutes, 10), 0, 0)
-
-    const delay = scheduledTime.getTime() - new Date().getTime()
-    if (delay > 0) {
-      setTimeout(() => {
-        sendNotification(task)
-      }, delay)
-    }
-  }
-
-  const sendNotification = (task) => {
-    if (userToken) {
-      fetch("https://fcm.googleapis.com/fcm/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `key=YOUR_SERVER_KEY`,
-        },
-        body: JSON.stringify({
-          to: userToken,
-          notification: {
-            title: `${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)} Priority Task`,
-            body: `Reminder: ${task.text} at ${task.time}`,
-            click_action: window.location.href,
-          },
-        }),
+  const addTask = (e) => {
+    e.preventDefault()
+    if (newTask.title.trim() !== "" && newTask.startTime && newTask.endTime) {
+      setTasks([...tasks, { ...newTask, id: uuidv4(), date: selectedDate.toISOString().split("T")[0] }])
+      setNewTask({
+        title: "",
+        startTime: "",
+        endTime: "",
+        priority: PRIORITY_LEVELS.MEDIUM.value,
+        completed: false,
       })
     }
   }
 
+  const updateTask = (id, updatedTask) => {
+    setTasks(tasks.map((task) => (task.id === id ? updatedTask : task)))
+  }
+
+  const deleteTask = (id) => {
+    setTasks(tasks.filter((task) => task.id !== id))
+  }
+
+  const toggleComplete = (id) => {
+    setTasks(tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)))
+  }
+
+  const filteredTasks = tasks.filter((task) => task.date === selectedDate.toISOString().split("T")[0])
+
+  const sortedTasks = [...filteredTasks].sort((a, b) => {
+    if (sortBy === "priority") {
+      const priorityOrder = Object.values(PRIORITY_LEVELS).map((p) => p.value)
+      return priorityOrder.indexOf(b.priority) - priorityOrder.indexOf(a.priority)
+    } else if (sortBy === "startTime") {
+      return a.startTime.localeCompare(b.startTime)
+    }
+    return 0
+  })
+
+  const renderPriorityOptions = () => {
+    return Object.values(PRIORITY_LEVELS).map((priority) => (
+      <option key={priority.value} value={priority.value}>
+        {priority.label}
+      </option>
+    ))
+  }
+
   return (
-    <div className="reminder-container">
-      <h1>Task & Reminder System</h1>
-      <div className="calendar-container">
-        <Calendar onChange={handleDateChange} value={selectedDate} />
-      </div>
+    <div className="daily-planner">
+          <div className="img"><img src={image} alt="" /></div>
+      <header>
+        <h1>Daily Planner</h1>
+      </header>
+      <main>
+        <div className="date-selector">
+          <input
+            type="date"
+            value={selectedDate.toISOString().split("T")[0]}
+            onChange={(e) => setSelectedDate(new Date(e.target.value))}
+          />
+        </div>
+        <form onSubmit={addTask} className="task-form">
+          <input
+            type="text"
+            placeholder="Task title"
+            value={newTask.title}
+            onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+            required
+          />
+          <div className="time-inputs">
+            <input
+              type="time"
+              value={newTask.startTime}
+              onChange={(e) => setNewTask({ ...newTask, startTime: e.target.value })}
+              required
+            />
+            <span>to</span>
+            <input
+              type="time"
+              value={newTask.endTime}
+              onChange={(e) => setNewTask({ ...newTask, endTime: e.target.value })}
+              required
+            />
+          </div>
+          <select value={newTask.priority} onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}>
+            {renderPriorityOptions()}
+          </select>
+          <button type="submit">Add Task</button>
+        </form>
 
-      <div className="task-section">
-        <h2>Selected Date: {selectedDate.toDateString()}</h2>
-        <input
-          type="text"
-          placeholder="Enter a task..."
-          value={taskInput}
-          onChange={(e) => setTaskInput(e.target.value)}
-        />
-        <input type="time" value={taskTime} onChange={(e) => setTaskTime(e.target.value)} />
-        <select value={taskPriority} onChange={(e) => setTaskPriority(e.target.value)}>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-        <button onClick={addTask}>Add Task</button>
-      </div>
+        <div className="task-controls">
+          <label>
+            Sort by:
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+              <option value="startTime">Start Time</option>
+              <option value="priority">Priority</option>
+            </select>
+          </label>
+        </div>
 
-      <div className="task-list">
-        <h3>Tasks for {selectedDate.toDateString()}:</h3>
-        {reminders[selectedDate.toDateString()]?.length > 0 ? (
-          <ul>
-            {reminders[selectedDate.toDateString()].map((task, index) => (
-              <li
-                key={index}
-                className="task-item"
-                style={{ borderLeft: `5px solid ${PRIORITY_COLORS[task.priority]}` }}
-              >
-                <span className="task-time">{task.time}</span>
-                <span className="task-text">{task.text}</span>
-                <span className="task-priority" style={{ backgroundColor: PRIORITY_COLORS[task.priority] }}>
-                  {task.priority}
+        <ul className="task-list">
+          {sortedTasks.map((task) => (
+            <li key={task.id} className={`task-item ${task.completed ? "completed" : ""}`}>
+              <div className="task-header">
+                <span className="task-time">
+                  {task.startTime} - {task.endTime}
                 </span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No tasks for this day.</p>
-        )}
-      </div>
+                <h3>{task.title}</h3>
+                <span
+                  className="priority-badge"
+                  style={{ backgroundColor: PRIORITY_LEVELS[task.priority.toUpperCase()].color }}
+                >
+                  {PRIORITY_LEVELS[task.priority.toUpperCase()].label}
+                </span>
+              </div>
+              <div className="task-actions">
+                <button onClick={() => toggleComplete(task.id)}>{task.completed ? "Undo" : "Complete"}</button>
+                <button onClick={() => deleteTask(task.id)}>Delete</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </main>
     </div>
   )
 }
 
-export default ReminderPage
+export default DailyPlanner
 

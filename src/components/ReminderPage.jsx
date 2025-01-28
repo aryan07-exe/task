@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./ReminderPage.css";
+
 import { requestNotificationPermission } from "./firebase-config";
 
 const ReminderPage = () => {
@@ -65,6 +66,7 @@ const ReminderPage = () => {
 
   return (
     <div className="reminder-container">
+      
       <h1>Task & Reminder System</h1>
       <div className="calendar-container">
         <Calendar onChange={handleDateChange} value={selectedDate} />
@@ -93,7 +95,9 @@ const ReminderPage = () => {
           <p>No tasks for this day.</p>
         )}
       </div>
+    
     </div>
+
   );
 };
 
