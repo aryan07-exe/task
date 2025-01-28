@@ -1,56 +1,67 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap");
 
 :root {
-  --primary-color: #3498db;
-  --primary-dark: #2980b9;
-  --secondary-color: #2ecc71;
-  --secondary-dark: #27ae60;
-  --background-color: #f5f7fa;
+  --primary-color: #3a506b;
+  --primary-light: #5c7a9c;
+  --secondary-color: #f0b67f;
+  --accent-color: #fe5f55;
+  --background-color: #f4f1de;
   --surface-color: #ffffff;
-  --text-color: #34495e;
-  --text-light: #7f8c8d;
-  --border-color: #bdc3c7;
-  --success-color: #2ecc71;
-  --warning-color: #f39c12;
-  --danger-color: #e74c3c;
+  --text-color: #2f3e46;
+  --text-light: #6c757d;
+  --border-color: #ced4da;
+  --success-color: #52b788;
+  --warning-color: #fca311;
+  --danger-color: #e63946;
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
   line-height: 1.6;
   margin: 0;
   padding: 0;
   background-color: var(--background-color);
   color: var(--text-color);
+  background-image: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80");
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 .daily-planner {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 header {
-  background-color: var(--primary-color);
-  color: white;
   text-align: center;
   padding: 20px 0;
   margin-bottom: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid var(--primary-color);
 }
 
 h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 3em;
+  font-weight: 700;
+  color: var(--primary-color);
   margin: 0;
-  font-size: 2.5em;
-  font-weight: 600;
 }
 
 main {
-  background-color: var(--surface-color);
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 30px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+}
+
+.sidebar {
+  background-color: var(--primary-light);
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
 }
 
 .date-selector {
@@ -61,49 +72,56 @@ main {
   width: 100%;
   padding: 10px;
   font-size: 16px;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
 }
 
 .task-form {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 30px;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .task-form input,
 .task-form select {
-  flex: 1;
   padding: 10px;
   font-size: 16px;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.task-form input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .time-inputs {
   display: flex;
-  align-items: center;
   gap: 10px;
 }
 
 .time-inputs input {
-  width: 120px;
+  flex: 1;
 }
 
 .task-form button {
   padding: 10px 20px;
-  background-color: var(--primary-color);
-  color: white;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: 600;
   transition: background-color 0.3s ease;
 }
 
 .task-form button:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--accent-color);
+  color: white;
 }
 
 .task-controls {
@@ -111,11 +129,11 @@ main {
 }
 
 .task-controls select {
-  margin-left: 10px;
-  padding: 5px;
+  padding: 5px 10px;
   font-size: 14px;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 5px;
+  background-color: white;
 }
 
 .task-list {
@@ -127,17 +145,19 @@ main {
   background-color: var(--surface-color);
   margin-bottom: 15px;
   padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .task-item:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .task-item.completed {
-  opacity: 0.6;
+  opacity: 0.7;
+  text-decoration: line-through;
 }
 
 .task-header {
@@ -155,36 +175,39 @@ main {
 .task-header h3 {
   margin: 0;
   font-size: 1.2em;
-  font-weight: 500;
+  font-weight: 600;
+  color: var(--primary-color);
 }
 
 .priority-badge {
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: 20px;
   color: white;
   font-size: 0.8em;
-  font-weight: 500;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .task-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  margin-top: 10px;
 }
 
 .task-actions button {
   padding: 5px 10px;
-  background-color: var(--secondary-color);
+  background-color: var(--primary-light);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s ease;
 }
 
 .task-actions button:hover {
-  background-color: var(--secondary-dark);
+  background-color: var(--primary-color);
 }
 
 .task-actions button:last-child {
@@ -192,33 +215,41 @@ main {
 }
 
 .task-actions button:last-child:hover {
-  background-color: #c0392b;
+  background-color: #c62828;
 }
 
-@media (max-width: 600px) {
-  .daily-planner {
-    padding: 10px;
-  }
+.quote-container {
+  text-align: center;
+  margin-top: 30px;
+  font-style: italic;
+  color: var(--text-light);
+}
 
-  main {
+.progress-bar {
+  height: 10px;
+  background-color: var(--border-color);
+  border-radius: 5px;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: var(--success-color);
+  transition: width 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .daily-planner {
     padding: 20px;
   }
 
-  .task-form {
-    flex-direction: column;
+  main {
+    grid-template-columns: 1fr;
   }
 
-  .time-inputs {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .time-inputs input {
-    width: 100%;
+  .sidebar {
+    order: -1;
   }
 }
 
-.img img {
-  height: 500px;
-  width: 500px;
-}
