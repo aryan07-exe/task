@@ -1,0 +1,149 @@
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f9f9f9;
+    --accent-color: #ff6b6b;
+    --text-color: #333;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+  
+  .planner-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px var(--shadow-color);
+  }
+  
+  h1 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+  }
+  
+  .task-input {
+    display: flex;
+    margin-bottom: 1.5rem;
+  }
+  
+  input[type="text"] {
+    flex-grow: 1;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 4px 0 0 4px;
+    outline: none;
+  }
+  
+  button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #3a7bc8;
+  }
+  
+  .task-input button {
+    border-radius: 0 4px 4px 0;
+  }
+  
+  .task-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .task-item {
+    background-color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    padding: 0.75rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease;
+  }
+  
+  .task-item:hover {
+    transform: translateX(5px);
+  }
+  
+  .schedule-btn {
+    display: block;
+    width: 100%;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    font-size: 1.1rem;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .schedule-btn:hover {
+    background-color: #ff5252;
+  }
+  
+  .time-slots {
+    background-color: var(--secondary-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+  
+  .time-slots h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+  }
+  
+  .time-slot {
+    background-color: white;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+  }
+  
+  .time-slot strong {
+    color: var(--primary-color);
+  }
+  
+  @media (max-width: 600px) {
+    .planner-container {
+      padding: 1rem;
+    }
+  
+    h1 {
+      font-size: 2rem;
+    }
+  
+    .task-input {
+      flex-direction: column;
+    }
+  
+    input[type="text"],
+    .task-input button {
+      width: 100%;
+      border-radius: 4px;
+    }
+  
+    .task-input button {
+      margin-top: 0.5rem;
+    }
+  }
+  
+  

@@ -36,17 +36,17 @@ function Dashboard() {
       <header className="dashboard-header">
         <h1>MindBot </h1>
         <div className="user-profile">
-          <img src="https://i.pravatar.cc/2350" alt="User Avatar" className="avatar" />
+          <img src="https://i.pravatar.cc/350" alt="User Avatar" className="avatar" />
           <div className="greeting">{greeting}, Alex!</div>
         </div>
       </header>
 
       <nav className="dashboard-nav">
-        <Link to="/ai-planner" className="nav-button">
+        <Link to="/plan" className="nav-button">
           <Calendar size={18} />
           AI Day Planner
         </Link>
-        <Link to="/todo-list" className="nav-button">
+        <Link to="/new" className="nav-button">
           <CheckSquare size={18} />
           To-Do List
         </Link>
@@ -54,7 +54,7 @@ function Dashboard() {
           <Bell size={18} />
           Reminders
         </Link>
-        <Link to="/collaborative-tasks" className="nav-button">
+        <Link to="/collab" className="nav-button">
           <Users size={18} />
           Collaborative Tasks
         </Link>

@@ -5,14 +5,16 @@ import Dashboard from './Dashboard';
 import New from './New';
 import Collab from './Collab';
 import Notes from './Notes';
+import Plan from './Planner';
 const RoutesComponent = () => {
   const routes = useRoutes([  
     { path: "/new", element: <New /> },
-    { path: "/dash", element: <Dashboard /> },
+    { path: "/", element: <Dashboard /> },
      { path: "/reminders", element: <ReminderPage /> },
      { path: "/collab", element: <Collab /> },
      { path: "/notes", element: <Notes /> },
-  ]);
+  { path: "/plan", element: <Plan /> },
+    ]);
 
   return routes;
 };
